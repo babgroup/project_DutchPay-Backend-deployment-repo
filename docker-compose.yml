@@ -7,6 +7,8 @@ services:
     ports:
       - "5173:5173"
     command: bash -c "npm install && npm run dev -- --host"
+    networks:
+      - frontend
 
   nest:
     image: node:20
@@ -16,6 +18,9 @@ services:
     ports:
       - "3000:3000"
     command: bash -c "npm install && npm run start:dev"
+    networks:
+      - frontend
+      - backend
   db:
     image: mysql:8.0
     restart: always
@@ -28,6 +33,12 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - backend
 
 volumes:
   db_data:
+
+networks:
+  frontend:
+  backend:
