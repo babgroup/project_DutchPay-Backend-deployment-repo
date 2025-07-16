@@ -1,41 +1,37 @@
 services:
-  nest:
+  nest: 
     image: node:20-buster
-    working_dir: /app
     environment:
+      - DB_TYPE=${DB_TYPE}
       - DB_HOST=${DB_HOST}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - FRONTEND_URL=${FRONTEND_URL}
-      - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_SECRET=${GOOGLE_SECRET}
-      - JWT_SECRET=${JWT_SECRET}
-    volumes:
-      - ./nest:/app
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
     ports:
       - "3000:3000"
+    volumes:
+      - ./server:/app
+    working_dir: /app
     command: bash -c "npm install && npm run start:dev"
     networks:
       - backend
   db:
     image: mysql:8.1.0
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3301:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - backend
 
-volumes:
-  db_data:
-
 networks:
   backend:
+
+volumes:
+  db_data:
