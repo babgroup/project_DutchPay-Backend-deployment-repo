@@ -3,7 +3,7 @@ import { UserRepository } from 'src/user/domain/repositories/user.repository';
 import { DataSource, QueryRunner } from 'typeorm';
 import { UserOrmEntity } from '../entities/user.entity';
 import { toDomain, toOrmEntity } from '../mappers/user.mapper';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TypeormUserRepository extends UserRepository {
@@ -20,45 +20,28 @@ export class TypeormUserRepository extends UserRepository {
     return toDomain(newUser);
   }
 
-  // 이름 변경
-  async updateName(
-    queryRunner: QueryRunner,
-    id: number,
-    name: string,
-  ): Promise<boolean> {
+  // 객체 업데이트
+  async update(queryRunner: QueryRunner, user: User): Promise<boolean> {
     const exist = await this.dataSource.manager.findOneBy(UserOrmEntity, {
-      id,
+      id: user.id,
     });
-    if (!exist) throw new BadRequestException('잘못된 접근 입니다.');
-    await queryRunner.manager.update(UserOrmEntity, id, { name });
+    if (!exist) return false;
+    await queryRunner.manager.update(
+      UserOrmEntity,
+      { id: user.id },
+      toOrmEntity(user),
+    );
     return true;
   }
 
-  // 이메일로 유저 찾기
-  async findByEmail(email: string): Promise<User | null> {
-    try {
-      const user = await this.dataSource.manager.findOne(UserOrmEntity, {
-        where: { email },
-      });
-      return user ? toDomain(user) : null;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  }
-
-  // 아이디로 유저 찾기
-  async findById(userId: number): Promise<User | null> {
-    try {
-      const user = await this.dataSource.manager.findOne(UserOrmEntity, {
-        where: {
-          id: userId,
-        },
-      });
-      return user ? toDomain(user) : null;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
+  // 유저 찾기
+  async findBy<K extends keyof UserOrmEntity>(
+    col: K,
+    data: UserOrmEntity[K],
+  ): Promise<User | null> {
+    const user = await this.dataSource.manager.findOne(UserOrmEntity, {
+      where: { [col]: data },
+    });
+    return user ? toDomain(user) : null;
   }
 }

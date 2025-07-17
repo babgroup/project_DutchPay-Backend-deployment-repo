@@ -16,15 +16,11 @@ export class LoginWithGoogleUseCase {
     input: LoginWithGoogleInput,
   ): Promise<{ userId: number; accessToken: string }> {
     // googleId로 유저 찾기
-    const user = await this.userRepository.findByEmail(input.email);
+    const user = await this.userRepository.findBy('email', input.email);
     if (!user) throw new Error('연결된 계정을 찾을 수 없습니다.');
 
     // accessToken 발급
-    const accessToken = await this.tokenService.generateAccessToken(
-      user.id,
-      user.name,
-      user.email,
-    );
+    const accessToken = await this.tokenService.generateAccessToken(user.id);
     return { userId: user.id, accessToken };
   }
 }

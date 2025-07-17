@@ -6,7 +6,6 @@ import { TransactionManager } from 'src/common/ports/transaction-manager.port';
 export interface CreateGoogleUserInput {
   name: string;
   email: string;
-  googleId: string;
 }
 
 @Injectable()
@@ -18,7 +17,7 @@ export class CreateGoogleUserUseCase {
 
   async execute(input: CreateGoogleUserInput): Promise<User> {
     // 같은 email의 사용자가 존재하는지 확인
-    const exists = await this.userRepository.findByEmail(input.email);
+    const exists = await this.userRepository.findBy('email', input.email);
     if (exists) throw new BadRequestException('사용중인 이메일 입니다.');
 
     const user = await this.transaction.execute(async (queryRunner) => {

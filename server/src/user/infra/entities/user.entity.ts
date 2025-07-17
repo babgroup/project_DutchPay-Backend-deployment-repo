@@ -13,6 +13,10 @@ export class UserOrmEntity {
   email: string;
   @Column()
   name: string;
+  @Column({ default: 0 })
+  studentNumber: number;
+  @Column({ default: 0 })
+  totalDiscount: number;
   @CreateDateColumn()
   createDate: Date;
 }

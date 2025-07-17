@@ -11,12 +11,10 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
   // token 생성, 내부 정보: userId,name,email , 유효시간 5시간
-  async generateAccessToken(
-    userId: number,
-    name: string,
-    email: string,
-  ): Promise<string> {
-    const payload = { id: userId, name, email };
+  async generateAccessToken(userId: number): Promise<string> {
+    const payload = {
+      id: userId,
+    };
     const options = {
       expiresIn: this.configService.get<string>('JWT_EXPIRATION_TIME') || '5h',
     };

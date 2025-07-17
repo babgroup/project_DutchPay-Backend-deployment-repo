@@ -5,8 +5,8 @@ import { UserRepository } from 'src/user/domain/repositories/user.repository';
 @Injectable()
 export class GetUserInfo {
   constructor(private readonly userRepository: UserRepository) {}
-  async execute(subId: number): Promise<User> {
-    const user = await this.userRepository.findById(subId);
+  async execute(col: string, data: any): Promise<User> {
+    const user = await this.userRepository.findBy(col, data);
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
