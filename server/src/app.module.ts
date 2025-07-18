@@ -8,6 +8,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpFilter } from './common/http.filter';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { RestaurantModule } from './restaurant/restaurant.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import * as winston from 'winston';
         database: config.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
     WinstonModule.forRoot({
@@ -75,6 +78,7 @@ import * as winston from 'winston';
     UserModule,
     CommonModule,
     AuthModule,
+    RestaurantModule,
   ],
   controllers: [],
   providers: [
