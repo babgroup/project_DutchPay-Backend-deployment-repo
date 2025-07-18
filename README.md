@@ -4,8 +4,8 @@
 
 ## 실행방법
 ```bash
-git clone https://github.com/MunSeongyun/nest_mysql_login_google_oauth2.git
-cd nest_mysql_login_google_oauth2
+git clone https://github.com/babgroup/project_DutchPay-Backend-deployment-repo.git dutchPay_backend
+cd dutchPay_backend
 cp .env.example .env
 cp server/.env.example server/.env
 # modify .env
