@@ -7,7 +7,7 @@ export class Restaurant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column() //db에는 길이제한이 있는데 굳이 길이 제한을 두어야하나 싶어서 일단 배제했음. 기본적으로 255로 제한됨
+  @Column()
   restaurantName: string;
 
   @Column()

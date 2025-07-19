@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, UseGuards, Req } from '@nestjs/common';
 import { FoodFareRoomDto } from './dto/create-food-fare-room.dto';
 import { RestaurantService } from './restaurant.service';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { CustomRequest } from 'src/shared/types/custom-request';
 
 @Controller('restaurant')
 export class RestaurantController {
@@ -35,27 +37,9 @@ export class RestaurantController {
     };
   }
 
+  @UseGuards(AuthGuard)
   @Post('food-fare-room')
-  async createFoodFareRoom(@Body() dto: FoodFareRoomDto) {
-    return await this.restaurantService.createFoodFareRoom(dto);
+  async createFoodFareRoom(@Req() req: CustomRequest, @Body() dto: FoodFareRoomDto) {
+    return await this.restaurantService.createFoodFareRoom(dto, req.user.id);
   }
-  // @Post('test')
-  // async createTest(@Body() dto: FoodFareRoomDto) {
-  //   return await this.restaurantService.createTest(dto);
-  // }
-
-  // @Get('test')
-  // async getTest() {
-  //   return await this.restaurantService.getTest();
-  // }
-
-  // @Patch('test/:id')
-  // async patch(@Param('id') id: string, @Body() dto: Partial<FoodFareRoomDto>) {
-  //   return await this.restaurantService.patchTest(Number(id), dto);
-  // }
-
-  // @Delete('test/:id')
-  // async deleteTest(@Param('id') id: string) {
-  //   return await this.restaurantService.deleteTest(Number(id));
-  // }
 }

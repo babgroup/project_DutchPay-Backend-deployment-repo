@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@nestjs/mapped-types": "^2.1.0",
-    "typeorm-naming-strategies": "^4.1.0"
-  }
-}

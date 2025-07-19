@@ -7,9 +7,12 @@ import { RestaurantService } from './restaurant.service';
 import { LeaderService } from './leader/leader.service';
 import { MemberService } from './member/member.service';
 import { Restaurant } from './entities/restaurant.entity';
-import { FoodFareRoom } from './entities/test.entity';
+import { FoodResult } from './entities/food-result.entity';
+import { FoodJoinUser } from './entities/food-join-user.entity';
+import { FoodFareRoom } from './entities/food-fare-room.entity';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Restaurant, FoodFareRoom])],
+  imports: [TypeOrmModule.forFeature([Restaurant, FoodFareRoom, FoodResult, FoodJoinUser,])],
   controllers: [RestaurantController, LeaderController, MemberController],
   providers: [RestaurantService, LeaderService, MemberService],
 })

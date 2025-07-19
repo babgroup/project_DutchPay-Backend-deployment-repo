@@ -24,8 +24,7 @@ export class RestaurantService {
 
     @InjectRepository(FoodFareRoom)
     private readonly foodFareRoomRepo: Repository<FoodFareRoom>,
-  ) {} //초기에 foodfareroom으로 레포 주입을 했는데 progress를 찾으려니 오류가 생김, progress가 있는걸로
-  //바꿨음 QueryBuilder 사용하면 된다는데 더 복잡해보여서.
+  ) {}
   async getCurrentRooms(): Promise<CurrentFoodRoomsResponseType[]> {
     const currentRooms = await this.foodResultRepo.find({
       where: { progress: 0 },
@@ -66,7 +65,7 @@ export class RestaurantService {
   async getUserInRoom(id: string): Promise<UserResponseType[]> {
     const userInRoom = await this.foodJoinUserRepo.find({
       where: { foodFareRoom: { id: +id } },
-      relations: ['user', 'foodFareRoom'],
+      relations: ['user', 'foodFareRoom', 'foodFareRoom.creatorUser'],
     });
 
     return userInRoom.map((room) => ({
@@ -77,40 +76,13 @@ export class RestaurantService {
     }));
   }
 
-  async createFoodFareRoom(dto: FoodFareRoomDto) {
+  async createFoodFareRoom(dto: FoodFareRoomDto, userId: number) {
     const foodFareRoom = this.foodFareRoomRepo.create({
       restaurant: { id: dto.restaurantId },
+      creatorUser: { id: userId },
       deadline: new Date(dto.deadline),
       minMember: dto.minMember,
     });
     return this.foodFareRoomRepo.save(foodFareRoom);
   }
 }
-// async createTest(dto: FoodFareRoomDto) {
-//   const test = this.foodFareRoomRepo.create({
-//     restaurant_id: dto.restaurant_id,
-//     deadline: dto.deadline,
-//     min_member: dto.min_member,
-//   });
-//   return this.foodFareRoomRepo.save(test);
-// }
-
-// async getTest() {
-//   return this.foodFareRoomRepo.find();
-// }
-
-// async patchTest(id: number, dto: Partial<FoodFareRoomDto>) {
-//   const test = await this.foodFareRoomRepo.preload({
-//     id,
-//     ...dto,
-//   });
-//   if (!test) {
-//     throw new NotFoundException({ id, message: 'FoodFareRoom not found' });
-//   }
-//   return this.foodFareRoomRepo.save(test);
-// }
-
-// async deleteTest(id: number) {
-//   return this.foodFareRoomRepo.delete(id);
-// }
-//}

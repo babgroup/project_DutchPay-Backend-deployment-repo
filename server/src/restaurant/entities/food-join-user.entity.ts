@@ -7,15 +7,15 @@ import {
 } from 'typeorm';
 import { FoodOrder } from './food-order.entity';
 import { FoodFareRoom } from './food-fare-room.entity';
-import { User } from './user.entity';
+import { UserOrmEntity } from 'src/user/infra/entities/user.entity';
 
 @Entity()
 export class FoodJoinUser {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.foodJoinUsers, { onDelete: 'CASCADE' })
-  user: User;
+  @ManyToOne(() => UserOrmEntity, (user) => user.foodJoinUsers, { onDelete: 'CASCADE' })
+  user: UserOrmEntity;
 
   @Column()
   deliveryConfirmation: number;
