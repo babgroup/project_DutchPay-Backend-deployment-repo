@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { FoodFareRoom } from '../entities/food-fare-room.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FoodRoomLeaderResponseDto } from './dto/food-room-leader-response.dto';
+import { FoodRoomLeaderResponseType } from './type/food-room-leader-response.type';
 import { FoodResult } from '../entities/food-result.entity';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class LeaderService {
     private readonly foodResultRepo: Repository<FoodResult>,
   ) {}
 
-  async getLeaderFoodFareRoom(id: string): Promise<FoodRoomLeaderResponseDto> {
+  async getLeaderFoodFareRoom(id: string): Promise<FoodRoomLeaderResponseType> {
     const leaderFoodFareRoom = await this.foodFareRoomRepo.findOne({
       where: { id: +id },
       relations: ['restaurant', 'foodJoinUsers', 'foodJoinUsers.user', 'foodJoinUsers.foodOrders', 'foodJoinUsers.foodOrders.foodItem'],
@@ -46,7 +46,7 @@ export class LeaderService {
     })
 
     if(!roomProgress) {
-      throw new NotFoundException(`${id} 방이 존재하지 않음`)
+      throw new NotFoundException(`foodResult에 ${id}번 방이 존재하지 않음`)
     }
     //위 코드가 없어도 돌아가긴함. nest 자체적으로 아래 progress 할당시 존재하지 않으면 500을 전달하기 때문
     roomProgress.progress = 3;
@@ -60,7 +60,7 @@ export class LeaderService {
     })
 
     if(!roomProgress) {
-      throw new NotFoundException(`${id} 방이 존재하지 않음`)
+      throw new NotFoundException(`foodResult에 ${id}번 방이 존재하지 않음`)
     }
 
     roomProgress.progress = 4;
