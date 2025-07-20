@@ -14,7 +14,7 @@ export class LeaderService {
   async getLeaderFoodFareRoom(id: string): Promise<FoodRoomLeaderResponseDto> {
     const leaderFoodFareRoom = await this.foodFareRoomRepo.findOne({
       where: { id: +id },
-      relations: ['restaurant', 'foodJoinUsers', 'foodJoinUsers.foodOrders'],
+      relations: ['restaurant', 'foodJoinUsers', 'foodJoinUsers.user', 'foodJoinUsers.foodOrders.foodItem', 'foodJoinUsers.foodOrders'],
     });
     if (!leaderFoodFareRoom) {
       throw new NotFoundException('FoodFareRoom not found');
