@@ -16,16 +16,20 @@ export class LeaderController {
   }
 
   @Patch('update-progress/:id')
-  patch3Progress(@Param('id') id: string) {
+  async patch3Progress(@Param('id') id: string) {
+    await this.leaderService.patch3Progress(id)
+
     return {
-      message: `${id}방에서 progress 3으로 변경`,
+      message: `foodFareRoom ID ${id}번 방에서 progress 3으로 변경`,
     };
   }
 
   @Patch('break-up/:id')
-  patch4progress(@Param('id') id: string) {
+  async patch4progress(@Param('id') id: string) {
+    await this.leaderService.patch4Progress(id)
+
     return {
-      message: `${id}방에서 progress 4로 변경`,
+      message: `foodFareRoom ID ${id}방에서 progress 4로 변경`,
     };
   }
 }
