@@ -83,12 +83,17 @@ export class RestaurantService {
       deadline: new Date(dto.deadline),
       minMember: dto.minMember,
     });
+
+    const savedRoom = await this.foodFareRoomRepo.save(foodFareRoom);
+
     //자동으로 foodResult, joinuser도 생성되어야함
     const foodResult = this.foodResultRepo.create({
-      foodFareRoom: foodFareRoom,
+      foodFareRoom: savedRoom,
       progress: 0,
       description: '없음'
     })
+
+    await this.foodResultRepo.save(foodResult);
 
     const foodJoinUser = this.foodJoinUserRepo.create({
         user: { id: userId },
@@ -96,6 +101,9 @@ export class RestaurantService {
         foodFareRoom: foodFareRoom,
         foodOrders: [],
     })
-    return this.foodFareRoomRepo.save(foodFareRoom);
+
+    await this.foodJoinUserRepo.save(foodJoinUser);
+
+    return savedRoom;
   }
 }

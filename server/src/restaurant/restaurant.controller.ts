@@ -11,7 +11,7 @@ export class RestaurantController {
   @Get('current-rooms')
   async getCurrentRooms() {
     const result = await this.restaurantService.getCurrentRooms();
-
+    
     return {
       message: '현재 생성된 방 전체',
       data: result,
